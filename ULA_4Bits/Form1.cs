@@ -1,10 +1,26 @@
+using System.Windows.Forms;
+
 namespace ULA_4Bits
 {
     public partial class Form1 : Form
     {
+        SerialCOM SerialCOM = new SerialCOM();
         public Form1()
         {
             InitializeComponent();
+
+            FillComboBox();
+        }
+
+        private void FillComboBox()
+        {
+            comboBox_SerialPorts.Items.Clear();
+            comboBox_SerialPorts.Items.Add("");
+
+            foreach (string port in SerialCOM.AutodetectArduinoPort())
+            {
+                comboBox_SerialPorts.Items.Add(port);
+            }
         }
 
         private void btn_openFile_Click(object sender, EventArgs e)
@@ -20,7 +36,10 @@ namespace ULA_4Bits
                     string fileText = File.ReadAllText(fileName);
 
                     textBoxFileName.Text = fileName;
-                    richTextBox1.Text = fileText;
+                    rtb_FileInstructions.Text = fileText;
+
+                    if (fileText.Length > 0)
+                        btn_ConvertToHex.Enabled = true;
                 }
             }
         }
@@ -29,12 +48,15 @@ namespace ULA_4Bits
         {
             HexConverter hexConverter = new HexConverter();
 
-            string[] fileTextInHex = hexConverter.ConvetToHex(richTextBox1.Text);
+            string[] fileTextInHex = hexConverter.ConvetToHex(rtb_FileInstructions.Text);
 
             foreach (string file in fileTextInHex)
             {
-                richTextBox2.Text += file + "\n";
+                rtb_HexInstructions.Text += file + "\n";
             }
+
+            rtb_HexInstructions.Enabled = true;
+            btn_DownloadHexFile.Enabled = true;
         }
 
         private void btn_DownloadHexFile_Click(object sender, EventArgs e)
@@ -44,16 +66,62 @@ namespace ULA_4Bits
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.Write(richTextBox2.Text);
+                    writer.Write(rtb_HexInstructions.Text);
                     writer.Close();
 
-                    MessageBox.Show("Download realizado com sucesso em " + filePath);
+                    MessageBox.Show("Download realizado com sucesso!");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void btn_SendDataToSerial_Click(object sender, EventArgs e)
+        {
+            bool testConnection = SerialCOM.TestCommunication();
+
+            if (testConnection)
+            {
+                if (rtb_HexInstructions.Text.Length > 0)
+                {
+                    SerialCOM.Write(rtb_HexInstructions.Text);
+                    rtb_SerialMonitor.Text = SerialCOM.Read(); // remover
+                }
+                else
+                    MessageBox.Show("Nada para enviar");
+            }
+            else
+            {
+                lbl_ConnectionStatus.Text = "Não conectado";
+                lbl_ConnectionStatus.ForeColor = Color.Red;
+                btn_SendDataToSerial.Enabled = false;
+                FillComboBox();
+            }
+        }
+
+        private void comboBox_SerialPorts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SerialCOM.Port = comboBox_SerialPorts.SelectedItem.ToString();
+            if (SerialCOM.OpenCommunication())
+            {
+                lbl_ConnectionStatus.Text = "Conectado";
+                lbl_ConnectionStatus.ForeColor = Color.Green;
+                btn_SendDataToSerial.Enabled = true;
+            }
+            else
+            {
+                lbl_ConnectionStatus.Text = "Não conectado";
+                lbl_ConnectionStatus.ForeColor = Color.Red;
+                btn_SendDataToSerial.Enabled = false;
+                FillComboBox();
+            }
+        }
+
+        private void comboBox_SerialPorts_DropDown(object sender, EventArgs e)
+        {
+            FillComboBox();
         }
     }
 }

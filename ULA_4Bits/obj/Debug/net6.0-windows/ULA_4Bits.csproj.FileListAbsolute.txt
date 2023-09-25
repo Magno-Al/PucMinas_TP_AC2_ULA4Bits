@@ -14,3 +14,16 @@ D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\D
 D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\Debug\net6.0-windows\ULA_4Bits.pdb
 D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\Debug\net6.0-windows\ULA_4Bits.genruntimeconfig.cache
 D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\Debug\net6.0-windows\ref\ULA_4Bits.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\System.CodeDom.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\System.IO.Ports.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\System.Management.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\linux-arm\native\libSystem.IO.Ports.Native.so
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\linux-arm64\native\libSystem.IO.Ports.Native.so
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\linux-x64\native\libSystem.IO.Ports.Native.so
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\osx-arm64\native\libSystem.IO.Ports.Native.dylib
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\osx-x64\native\libSystem.IO.Ports.Native.dylib
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\unix\lib\net6.0\System.IO.Ports.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.IO.Ports.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Management.dll
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\Debug\net6.0-windows\ULA_4Bits.csproj.AssemblyReference.cache
+D:\Faculdade\Eng_Computação\Arquitetura de Computadores II\Tp4\ULA_4Bits\obj\Debug\net6.0-windows\ULA_4Bits.csproj.CopyComplete
