@@ -1,3 +1,4 @@
+using System.IO.Ports;
 using System.Windows.Forms;
 
 namespace ULA_4Bits
@@ -5,24 +6,38 @@ namespace ULA_4Bits
     public partial class Form1 : Form
     {
         SerialCOM SerialCOM = new SerialCOM();
+
         public Form1()
         {
             InitializeComponent();
+        }
 
+        #region ComboBox de comunicação serial  
+        private void comboBox_SerialPorts_DropDown(object sender, EventArgs e)
+        {
             FillComboBox();
+        }
+
+        private void comboBox_SerialPorts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SerialCOM.Port = comboBox_SerialPorts.SelectedItem.ToString();
+
+            ShowCommunicationStatus(SerialCOM.OpenCommunication());
         }
 
         private void FillComboBox()
         {
             comboBox_SerialPorts.Items.Clear();
-            comboBox_SerialPorts.Items.Add("");
 
+            comboBox_SerialPorts.Items.Add("Sem conecção");
             foreach (string port in SerialCOM.AutodetectArduinoPort())
             {
                 comboBox_SerialPorts.Items.Add(port);
             }
         }
+        #endregion
 
+        #region Botões de tratamento de arquivos
         private void btn_openFile_Click(object sender, EventArgs e)
         {
             Stream stream;
@@ -87,28 +102,26 @@ namespace ULA_4Bits
                 if (rtb_HexInstructions.Text.Length > 0)
                 {
                     SerialCOM.Write(rtb_HexInstructions.Text);
-                    rtb_SerialMonitor.Text = SerialCOM.Read(); // remover
                 }
                 else
                     MessageBox.Show("Nada para enviar");
             }
             else
             {
-                lbl_ConnectionStatus.Text = "Não conectado";
-                lbl_ConnectionStatus.ForeColor = Color.Red;
-                btn_SendDataToSerial.Enabled = false;
-                FillComboBox();
+                ShowCommunicationStatus(false);
             }
         }
+        #endregion
 
-        private void comboBox_SerialPorts_SelectedIndexChanged(object sender, EventArgs e)
+        #region Status de comunicação serial 
+        private async void ShowCommunicationStatus(bool status)
         {
-            SerialCOM.Port = comboBox_SerialPorts.SelectedItem.ToString();
-            if (SerialCOM.OpenCommunication())
+            if (status)
             {
                 lbl_ConnectionStatus.Text = "Conectado";
                 lbl_ConnectionStatus.ForeColor = Color.Green;
                 btn_SendDataToSerial.Enabled = true;
+                await ReadSerialDataAsync();
             }
             else
             {
@@ -118,10 +131,44 @@ namespace ULA_4Bits
                 FillComboBox();
             }
         }
+        #endregion
 
-        private void comboBox_SerialPorts_DropDown(object sender, EventArgs e)
+        #region Async Leitura da comunicação serial 
+        private async Task ReadSerialDataAsync()
         {
-            FillComboBox();
+            string data;
+            bool exit = false;
+            while (!exit)
+            {
+                if (SerialCOM.TestCommunication())
+                {
+                    data = SerialCOM.Read();
+
+                    UpdateSerialMonitor(data);
+                }
+                else
+                {
+                    exit = true;
+                }
+
+                await Task.Delay(1000);
+            }
         }
+
+        private void UpdateSerialMonitor(string data)
+        {
+            // Use Invoke para atualizar a interface do usuário a partir de um thread de segundo plano
+            if (rtb_SerialMonitor.InvokeRequired)
+            {
+                rtb_SerialMonitor.Invoke((MethodInvoker)(() => UpdateSerialMonitor(data)));
+            }
+            else
+            {
+                rtb_SerialMonitor.AppendText("\n");
+                rtb_SerialMonitor.AppendText(data);
+                rtb_SerialMonitor.ScrollToCaret();
+            }
+        }
+        #endregion
     }
 }

@@ -38,11 +38,29 @@ namespace ULA_4Bits
             return true;
         }
 
+        public bool CloseCommunication()
+        {
+            if (serialPort.IsOpen)
+            {
+                try
+                {
+                    serialPort.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool TestCommunication()
         {
             if (serialPort.IsOpen)
                 return true;
-            else 
+            else
                 return false;
         }
 
@@ -60,10 +78,8 @@ namespace ULA_4Bits
                 if (readData == null)
                 {
                     readData = "readData is null";
-                    // Console.WriteLine("readData is null");
                 }
                 readData = readData.Replace("\r", string.Empty);
-                //Console.WriteLine(readData);
             }
             catch (Exception ex)
             {

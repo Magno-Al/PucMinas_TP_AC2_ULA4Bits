@@ -12,14 +12,15 @@ namespace ULA_4Bits
     {
         string[] Mnemonico = { "nA", "AoBn", "nAeB", "Lzero", "AeBn", "nB", "AxB", "AenB", "nAoB", "AxBn",
             "Bcopia", "AeB", "Lum", "AonB", "AoB", "Acopia" };
-        string[] InstructionsULA { get; set; }
+        
+        string[] InstructionsInHex { get; set; }
 
         public string[] ConvetToHex(string instructionsULA)
         {
             char[] delims = new[] { ';', ':', '\r', '\n' };
 
             string[] assignments;
-            string[] hexFile;
+            string[] auxInstructionsInHex;
 
             char X = ' ';
             char Y = ' ';
@@ -28,15 +29,15 @@ namespace ULA_4Bits
             int W;
             int indexHexFile = 0;
 
-            InstructionsULA = instructionsULA.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-            
-            hexFile = new string[SizeOfHexFile(InstructionsULA)];
+            auxInstructionsInHex = instructionsULA.Split(delims, StringSplitOptions.RemoveEmptyEntries); //Corta o arquivo pelos delimitadores em um vetor.
 
-            int begin = Array.IndexOf(InstructionsULA, "inicio");
+            InstructionsInHex = new string[CountOf_W_InstructionsInVector(auxInstructionsInHex)];
 
-            for (int i = begin + 1; i < InstructionsULA.Length; i++)
+            int begin = Array.IndexOf(auxInstructionsInHex, "inicio");
+
+            for (int i = begin + 1; i < auxInstructionsInHex.Length; i++)
             {
-                assignments = InstructionsULA[i].Split('=');
+                assignments = auxInstructionsInHex[i].Split('=');
 
                 if (assignments.Length == 2 && assignments[0] == "X")
                 {
@@ -49,17 +50,17 @@ namespace ULA_4Bits
                 else if (assignments[0] == "W")
                 {
                     W = Array.IndexOf(Mnemonico, assignments[1]);
-                    S = W.ToString("X")[0]; // Convet int to hex
+                    S = W.ToString("X")[0]; // Convet int to hex.
 
-                    hexFile[indexHexFile] = $"{X}{Y}{S}";
+                    InstructionsInHex[indexHexFile] = $"{X}{Y}{S}";
                     indexHexFile ++;
                 }
             }
 
-            return hexFile;
+            return InstructionsInHex;
         }
 
-        private int SizeOfHexFile(string[] InstructionsULA)
+        private int CountOf_W_InstructionsInVector(string[] InstructionsULA)
         {
             int count = 0;
 
